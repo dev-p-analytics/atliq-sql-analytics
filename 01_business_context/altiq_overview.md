@@ -10,8 +10,9 @@ AtliQ Hardware is a global hardware manufacturing company that sells products ac
 * \*\*Manufacturing\*\*: primary facilities in India with global component sourcing
 * \*\*Distribution\*\*: Multi-channel sales including distributors, retailers and e-commerce platforms
 * \*\*Customers\*\*: Mix of B2B (corporate clients, government) and B2C (retail consumers within their stores)
+  
 
-  ## Business Model
+## Business Model
 
 Revenue is mainly generated through B2B-focused hardware sales across:
 
