@@ -1,8 +1,8 @@
-\# AtliQ Hardware - Business Context
+# AtliQ Hardware - Business Context
 
 
 
-\## Company Overview
+## Company Overview
 AtliQ Hardware is a global hardware manufacturing company that sells products across multiple regions and markets. The company operates through distributors and customers and manages large volumes of transactional sale data.
 
 ## Core Operations
