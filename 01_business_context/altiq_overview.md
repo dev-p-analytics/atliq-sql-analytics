@@ -7,18 +7,18 @@ AtliQ Hardware is a global hardware manufacturing company that sells products ac
 
 ## Core Operations
 
-* \*\*Manufacturing\*\*: primary facilities in India with global component sourcing
-* \*\*Distribution\*\*: Multi-channel sales including distributors, retailers and e-commerce platforms
-* \*\*Customers\*\*: Mix of B2B (corporate clients, government) and B2C (retail consumers within their stores)
+**Manufacturing**: primary facilities in India with global component sourcing
+**Distribution**: Multi-channel sales including distributors, retailers and e-commerce platforms
+**Customers**: Mix of B2B (corporate clients, government) and B2C (retail consumers within their stores)
   
 
 ## Business Model
 
 Revenue is mainly generated through B2B-focused hardware sales across:
 
-* \*\*Traditional Channels\*\*: primary facilities in India with global component sourcing
-* \*\*E-Commerce Platforms\*\*: Bulk sales to Amazon, Flipkart, and other online retailers
-* \*\*Direct Sales\*\*: Done through company website and brand stores
+**Traditional Channels**: primary facilities in India with global component sourcing
+**E-Commerce Platforms**: Bulk sales to Amazon, Flipkart, and other online retailers
+**Direct Sales**: Done through company website and brand stores
 
 
 
@@ -33,10 +33,10 @@ Revenue is mainly generated through B2B-focused hardware sales across:
 
 ## Data Analytics Needs
 
-* Finance Reporting (Gross Sales, Net Sales, Discounts)
-* Market and customer performance analysis
-* Supply chain insights and forecast accuracy
-* Faster and more reliable decision-making 
+- Finance Reporting (Gross Sales, Net Sales, Discounts)
+- Market and customer performance analysis
+- Supply chain insights and forecast accuracy
+- Faster and more reliable decision-making 
 
 
 
@@ -44,9 +44,9 @@ Revenue is mainly generated through B2B-focused hardware sales across:
 
 The objective of the project is to:
 
-* Design analytical SQL queries on structured data
-* Create reusable database objects such as views and stored procedures
-* Enable finance, sales, and supply chain teams to access consistent metrics
+- Design analytical SQL queries on structured data
+- Create reusable database objects such as views and stored procedures
+- Enable finance, sales, and supply chain teams to access consistent metrics
 
 
 
