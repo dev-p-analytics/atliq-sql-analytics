@@ -21,7 +21,7 @@ Revenue is mainly generated through B2B-focused hardware sales across:
 
 
 
-\## Key Business Challenges
+## Key Business Challenges
 
 1. Limited visibility into gross and net sales performance
 2. Difficulty analysing performance across markets and customers
@@ -30,7 +30,7 @@ Revenue is mainly generated through B2B-focused hardware sales across:
 
 
 
-\## Data Analytics Needs
+## Data Analytics Needs
 
 * Finance Reporting (Gross Sales, Net Sales, Discounts)
 * Market and customer performance analysis
@@ -39,7 +39,7 @@ Revenue is mainly generated through B2B-focused hardware sales across:
 
 
 
-\## Analytics Objectives
+## Analytics Objectives
 
 The objective of the project is to:
 
