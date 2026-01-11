@@ -32,41 +32,41 @@ Used across pricing, cost and sales-related fact tables
 
 ### facts_forecast_monthly
 Stores monthly demand forecasts for products across 
-Used for:
+used for:
 - Supply chain planning
 - Forecast accuracy analysis
 
 ### facts_freight_cost
 Stores freight-related costs across different markets
-Used for:
+used for:
 - Transportation cost analysis
 
 ### facts_gross_price
 Stores gross pricing information for products 
-Used for:
+used for:
 - Gross sales calculation
 - Trend analysis
 
 ### facts_manufacturing_cost
 Stores product manufacturing costs across years
-Used for:
+used for:
 - Cost analysis
 - Profitability calculations
 
 ### facts_post_invoice_deductions
 Stores discounts and deductions post-invoice
-Used for:
+used for:
 - Net sales calculations
 - Discount analysis
 
 ### facts_pre_invoice_deductions
 Stores pre-invoice discounts
-Used for:
+used for:
 - Discount analysis
 
 ### facts_sales_monthly
 Stores the monthly sales of products across customers
-Used for:
+used for:
 - Net sales calculations
 - Trend analysis
 - Profitability Calculations
