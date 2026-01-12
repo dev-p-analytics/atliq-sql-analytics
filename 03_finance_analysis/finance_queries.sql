@@ -86,6 +86,26 @@ WHERE
 
 ORDER BY date ASC
 
+-- ====================================================
+-- Gross Monthly Sales for Customer Croma
+-- ====================================================
+-- Business Question: 
+-- Calculate total monthly gross sales for customer Croma using Australian fiscal year pricing
+
+SELECT 
+	sm.date, 
+    SUM(gp.gross_price*sm.sold_quantity) AS gross_sales_total
+FROM fact_sales_monthly sm
+JOIN fact_gross_price gp
+ON 
+	gp.product_code = sm.product_code AND
+	gp.fiscal_year = get_fiscal_year_au(sm.date)
+    
+WHERE sm.aaaaaaaaacustomer_code = 90002002
+GROUP BY sm.date
+ORDER BY sm.date ASC
+
+
 
 
 
