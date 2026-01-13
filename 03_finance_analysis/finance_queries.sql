@@ -22,10 +22,14 @@ END;
 -- Business Question: 
 -- Retrieve monthly sales records for customer Croma (using customer code) within fiscal year 2022
 
-SELECT * FROM gdb0041.fact_sales_monthly
+SELECT 
+	date, 
+	product_code,
+	sold_quantity
+FROM fact_sales_monthly
 WHERE
 customer_code = 90002002 AND
-fiscal_year_au(date) = 2022
+get_fiscal_year_au(date) = 2022
 ORDER BY date DESC;
 
 -- ====================================================
@@ -41,9 +45,9 @@ CREATE FUNCTION `get_fiscal_quarter_au` (
 
 DETERMINISTIC
 BEGIN
-	DECLARE get_fiscal_quarter_au INT;
-	SET get_fiscal_quarter_au= QUARTER(DATE_ADD(calendar_date, INTERVAL 6 MONTH)); -- Quarter instead of year()
-	RETURN get_fiscal_quarter_au;
+	DECLARE fiscal_quarter_au INT;
+	SET fiscal_quarter_au= QUARTER(DATE_ADD(calendar_date, INTERVAL 6 MONTH)); -- Quarter instead of year()
+	RETURN fiscal_quarter_au;
 END
 
 -- ====================================================
@@ -79,7 +83,7 @@ JOIN fact_gross_price gp
 
 ON 
 	gp.product_code = p.product_code AND
-    gp.get_fiscal_year_au= get_fiscal_year_au(sm.date)
+    gp.fiscal_year = get_fiscal_year_au(sm.date)
 WHERE
 	customer_code = 90002002
 	AND	get_fiscal_year_au(sm.date) = 2021
