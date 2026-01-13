@@ -56,7 +56,7 @@ END
 -- Business Question: 
 -- Retrieve monthly sales records for customer Croma (using customer code) within fiscal year 2022 AND within Quarter 4 (Q4 refers to April - June)
 	
-SELECT * FROM gdb0041.fact_sales_monthly
+SELECT * FROM fact_sales_monthly
 WHERE
 	customer_code = 90002002 
 	AND fiscal_year_au(date) = 2022
@@ -73,14 +73,13 @@ SELECT
 sm.date, sm.product_code,
 p.product, p.variant, sm.sold_quantity,
 gp.gross_price,
-(gp.gross_price * sm.sold_quantity) AS gross_sales_total
+(gp.gross_price * sm.sold_quantity) AS monthly_sales
 
 FROM fact_sales_monthly sm
 JOIN dim_product p
 ON sm.product_code = p.product_code
 
 JOIN fact_gross_price gp
-
 ON 
 	gp.product_code = p.product_code AND
     gp.fiscal_year = get_fiscal_year_au(sm.date)
@@ -98,7 +97,7 @@ ORDER BY date ASC
 
 SELECT 
 	sm.date, 
-    SUM(gp.gross_price*sm.sold_quantity) AS gross_sales_total
+    SUM(gp.gross_price*sm.sold_quantity) AS monthly_sales
 FROM fact_sales_monthly sm
 JOIN fact_gross_price gp
 ON 
@@ -127,3 +126,32 @@ WHERE sm.customer_code = 90002002 -- croma customer key
 GROUP BY gp.fiscal_year -- group by fiscal year as an aggregated column exists in SELECT statement
 ORDER BY gp.fiscal_year
 
+-- ====================================================
+-- Stored Procedure: Monthly Gross Sales for Customers
+-- ====================================================
+-- Purpose: 
+-- Return monthly gross sales for one or more customers using Australian fiscal year pricing logic.
+-- 
+-- Input:
+-- in_customer_codes: comma-separated list of customer codes
+-- Example: '90002002, 90002003'
+
+CREATE PROCEDURE get_monthly_gross_sales_for_customer (
+    IN in_customer_codes VARCHAR(255)
+)
+BEGIN
+	SELECT 
+		sm.date, 
+		SUM(gp.gross_price*sm.sold_quantity) AS monthly_sales
+	FROM fact_sales_monthly sm
+	JOIN fact_gross_price gp
+	ON gp.product_code = sm.product_code 
+	AND gp.fiscal_year = get_fiscal_year_au(sm.date)
+		
+	WHERE
+		FIND_IN_SET(sm.customer_code, in_customer_codes) >0 -- FIND_IN_SET() is a MySQL-specific function that checks whether the value exists inside the comma-separated list
+	GROUP BY sm.date										-- In this case, keep only rows where sm.customer_code is present in the list of customer codes that is taken as input
+	ORDER BY sm.date ASC;									-- FIND_IN_SET() is used to support passing multiple customer IDs/codes into the procedure for reporting flexibility, it's viable for small databases/systems and analytics use cases.
+END
+
+CALL get_monthly_gross_sales_for_customer(90002002);
