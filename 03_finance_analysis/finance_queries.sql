@@ -105,7 +105,21 @@ WHERE sm.customer_code = 90002002
 GROUP BY sm.date
 ORDER BY sm.date ASC
 
+-- ====================================================
+-- Yearly Report on Croma Sales
+-- ====================================================
+-- Business Question: 
+-- Generate a yearly report for Croma, where the fiscal year and total gross sales in that year are displayed
 
+SELECT 
+	gp.fiscal_year,
+	ROUND(SUM(gp.gross_price * sm.sold_quantity),2) AS yearly_sales
+FROM fact_sales_monthly sm
+JOIN fact_gross_price gp
+	ON gp.product_code = sm.product_code   -- primary key 
+	AND gp.fiscal_year = get_fiscal_year_au(sm.date) -- sm table did not have fiscal_year to link the two, while gp table did, so the previous get_fiscal_year_au function was used to match sales in each year
 
-
+WHERE sm.customer_code = 90002002 -- croma customer key
+GROUP BY gp.fiscal_year -- group by fiscal year as an aggregated column exists in SELECT statement
+ORDER BY gp.fiscal_year
 
