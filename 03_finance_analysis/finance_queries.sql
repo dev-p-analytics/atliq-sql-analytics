@@ -101,7 +101,7 @@ ON
 	gp.product_code = sm.product_code AND
 	gp.fiscal_year = get_fiscal_year_au(sm.date)
     
-WHERE sm.aaaaaaaaacustomer_code = 90002002
+WHERE sm.customer_code = 90002002
 GROUP BY sm.date
 ORDER BY sm.date ASC
 
