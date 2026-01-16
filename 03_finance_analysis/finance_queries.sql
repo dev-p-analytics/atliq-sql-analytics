@@ -155,3 +155,33 @@ BEGIN
 END
 
 CALL get_monthly_gross_sales_for_customer(90002002);
+
+
+-- ====================================================
+-- Finance Query: Gross Sales with Pre-Invoice Discounts
+-- ====================================================
+-- Business Question: 
+-- Retrieve product-level gross sales and applicable pre-invoice discount percentages for FY2021
+
+SELECT
+	sm.date, sm.product_code,
+	p.product, p.variant, sm.sold_quantity,
+	gp.gross_price,
+	(gp.gross_price * sm.sold_quantity) AS monthly_sales,
+	pre.pre_invoice_discount_pct
+FROM fact_sales_monthly sm
+JOIN dim_product p
+ON sm.product_code = p.product_code
+
+JOIN fact_gross_price gp
+ON 
+	gp.product_code = p.product_code AND
+    gp.fiscal_year = get_fiscal_year_au(sm.date)
+JOIN fact_pre_invoice_deductions pre
+ON
+	sm.customer_code = pre.customer_code AND
+	pre.fiscal_year = get_fiscal_year_au(sm.date)
+WHERE
+	get_fiscal_year_au(sm.date) = 2021
+
+ORDER BY date ASC
