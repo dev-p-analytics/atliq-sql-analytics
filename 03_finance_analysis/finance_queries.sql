@@ -185,3 +185,34 @@ WHERE
 	get_fiscal_year_au(sm.date) = 2021
 
 ORDER BY date ASC
+
+-- ====================================================
+-- Finance Query: Gross Sales with Pre-Invoice Discounts
+-- ====================================================
+-- This query uses a date dimension (dim_date) to derive FY logic, avoiding row-level function calls and improving performance
+--
+-- Joins:
+-- fact_sales_monthly -> dim_product -> dim_date -> fact_gross_price
+
+EXPLAIN ANALYZE              -- Used to identify query run and fetch times
+SELECT
+	sm.date, sm.product_code,
+	p.product, p.variant, sm.sold_quantity,
+	gp.gross_price,
+	(gp.gross_price * sm.sold_quantity) AS monthly_sales,
+	pre.pre_invoice_discount_pct
+FROM fact_sales_monthly sm
+JOIN dim_product p
+ON sm.product_code = p.product_code
+JOIN dim_date dt
+	ON dt.calendar_date = sm.date
+JOIN fact_gross_price gp
+ON 
+	gp.product_code = p.product_code AND
+    gp.fiscal_year = dt.fiscal_year
+JOIN fact_pre_invoice_deductions pre
+ON
+	sm.customer_code = pre.customer_code AND
+	pre.fiscal_year = dt.fiscal_year
+WHERE
+	dt.fiscal_year = 2021
