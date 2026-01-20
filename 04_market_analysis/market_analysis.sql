@@ -32,7 +32,7 @@ BEGIN
 END
 
 -- ====================================================
--- Stored Procedure: Top Markets by Net Sales
+-- Stored Procedure: get_top_markets_by_net_sales
 -- ====================================================
 -- Purpose: 
 -- Return top markets by inputting parameters of fiscal_year and number to limit by
@@ -50,3 +50,29 @@ BEGIN
 	ORDER BY net_sales_millions DESC
 LIMIT in_top_n;
 END
+
+-- ====================================================
+-- Stored Procedure: get_top_n_customers_by_net_sales
+-- ====================================================
+-- Purpose: 
+-- Returns top N customers by net sales for a given fiscal year and market
+
+CREATE PROCEDURE `get_top_n_customers_by_net_sales` (
+	in_fiscal_year INT,
+    in_top_n INT,
+	in_market VARCHAR(45))
+BEGIN
+	SELECT 
+		c.customer,
+		ROUND(SUM(n.net_sales)/1000000,2) AS net_sales_millions
+	FROM net_sales n
+	JOIN dim_customer c
+	ON c.customer_code = n.customer_code 
+	WHERE 
+		n.fiscal_year = in_fiscal_year AND
+        n.market = in_market
+	GROUP BY c.customer
+	ORDER BY net_sales_millions DESC
+    LIMIT in_top_n;
+END
+
