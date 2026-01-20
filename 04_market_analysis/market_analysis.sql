@@ -76,3 +76,22 @@ BEGIN
     LIMIT in_top_n;
 END
 
+-- ====================================================
+-- Stored Procedure: get_top_n_products_by_net_sales
+-- ====================================================
+-- Purpose: 
+-- Returns top N products by net sales for a given fiscal year
+
+CREATE PROCEDURE `get_top_n_customers_by_net_sales` (
+	IN in_fiscal_year INT,
+	IN in_top_n INT)
+BEGIN 
+	SELECT
+	product,
+	ROUND(SUM(net_sales)/1000000,2) AS net_sales_millions
+FROM net_sales n 
+WHERE fiscal_year = in_fiscal_year
+GROUP BY product
+ORDER BY net_sales_millions DESC
+LIMIT in_top_n;
+END
