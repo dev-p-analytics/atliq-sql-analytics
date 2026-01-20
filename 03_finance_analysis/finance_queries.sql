@@ -226,6 +226,7 @@ WHERE
  CREATE VIEW `sales_preinv_discount` AS
 SELECT
 	sm.date,
+	dt.fiscal_year,
 	sm.customer_code,
 	c.market,
 	sm.product_code,
