@@ -258,3 +258,25 @@ JOIN fact_pre_invoice_deductions pre
 SELECT *,
 	(monthly_sales - monthly_sales*pre_invoice_discount_pct) AS net_invoice_sales
 FROM sales_preinv_discount
+
+-- ====================================================
+-- VIEW 2: sales_postinv_discount
+-- ====================================================
+-- Purpose: Show sales with pricing and post-invoice discounts
+-- Product x Customer x Date
+
+CREATE VIEW `sales_postinv_discount` AS
+SELECT
+	s.date, s.fiscal_year,
+    s.customer_code, s.market,
+    s.product_code, s.product, s.variant,
+    s.sold_quantity, s.monthly_sales,
+    s.pre_invoice_discount_pct,
+    (1-pre_invoice_discount_pct) * monthly_sales AS net_invoice_sales,
+    (po.discounts_pct + po.other_deductions_pct) AS post_invoice_discount_pct
+FROM sales_preinv_discount s 
+JOIN fact_post_invoice_deductions po
+ON po.customer_code = s.customer_code AND
+	po.product_code = s.product_code AND
+	po.date = s.date
+
