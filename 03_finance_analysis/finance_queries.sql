@@ -280,3 +280,11 @@ ON po.customer_code = s.customer_code AND
 	po.product_code = s.product_code AND
 	po.date = s.date
 
+-- ====================================================
+-- Finance Query: Obtaining Net Sales
+-- ====================================================
+-- Business Question: Return Net Sales from previously created views
+
+SELECT *,
+	(1-post_invoice_discount_pct)*net_invoice_sales AS net_sales
+FROM sales_postinv_discount
