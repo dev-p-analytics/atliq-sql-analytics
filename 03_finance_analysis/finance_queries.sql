@@ -216,3 +216,44 @@ ON
 	pre.fiscal_year = dt.fiscal_year
 WHERE
 	dt.fiscal_year = 2021
+
+-- ====================================================
+-- VIEW 1: sales_preinv_discount
+-- ====================================================
+-- Purpose: Show sales with pricing and pre-invoice discounts
+-- Product x Customer x Date
+
+ CREATE VIEW `sales_preinv_discount` AS
+SELECT
+	sm.date,
+	sm.customer_code,
+	c.market,
+	sm.product_code,
+	p.product, p.variant, sm.sold_quantity,
+	gp.gross_price,
+	(gp.gross_price * sm.sold_quantity) AS monthly_sales,
+	pre.pre_invoice_discount_pct
+FROM fact_sales_monthly sm
+JOIN dim_customer c ON sm.customer_code = c.customer_code
+JOIN dim_product p
+	ON sm.product_code = p.product_code
+JOIN dim_date dt
+	ON dt.calendar_date = sm.date
+JOIN fact_gross_price gp
+	ON 
+	gp.product_code = p.product_code AND
+	gp.fiscal_year = dt.fiscal_year
+JOIN fact_pre_invoice_deductions pre
+	ON
+	sm.customer_code = pre.customer_code AND
+	pre.fiscal_year = dt.fiscal_year
+
+-- ====================================================
+-- Finance Query: Obtaining Net Invoice Sales
+-- ====================================================
+-- Business Question: Return Net Invoice Sales alongside customers and the related purchased products using view
+-- Product x Customer x Date
+
+SELECT *,
+	(monthly_sales - monthly_sales*pre_invoice_discount_pct) AS net_invoice_sales
+FROM sales_preinv_discount
