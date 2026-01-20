@@ -288,3 +288,13 @@ ON po.customer_code = s.customer_code AND
 SELECT *,
 	(1-post_invoice_discount_pct)*net_invoice_sales AS net_sales
 FROM sales_postinv_discount
+
+-- ====================================================
+-- VIEW 3: Net Sales
+-- ====================================================
+-- Purpose: Show net sales after both pre-invoice and post-invoice discount deductions in a table for aggregation purposes
+
+CREATE VIEW `net_sales` AS
+SELECT *,
+	(1-post_invoice_discount_pct)*net_invoice_sales AS net_sales
+FROM sales_postinv_discount
