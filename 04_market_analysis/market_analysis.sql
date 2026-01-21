@@ -30,3 +30,68 @@ BEGIN
 		SET out_badge = 'Silver';
 	END IF;
 END
+
+-- ====================================================
+-- Stored Procedure: get_top_markets_by_net_sales
+-- ====================================================
+-- Purpose: 
+-- Return top markets by inputting parameters of fiscal_year and number to limit by
+	
+CREATE PROCEDURE `get_top_n_markets_by_net_sales` (
+	in_fiscal_year INT,
+    in_top_n INT)
+BEGIN
+	SELECT 
+		market,
+		ROUND(SUM(net_sales)/1000000,2) AS net_sales_millions
+	FROM net_sales
+	WHERE fiscal_year = in_fiscal_year
+	GROUP BY market
+	ORDER BY net_sales_millions DESC
+LIMIT in_top_n;
+END
+
+-- ====================================================
+-- Stored Procedure: get_top_n_customers_by_net_sales
+-- ====================================================
+-- Purpose: 
+-- Returns top N customers by net sales for a given fiscal year and market
+
+CREATE PROCEDURE `get_top_n_customers_by_net_sales` (
+	in_fiscal_year INT,
+    in_top_n INT,
+	in_market VARCHAR(45))
+BEGIN
+	SELECT 
+		c.customer,
+		ROUND(SUM(n.net_sales)/1000000,2) AS net_sales_millions
+	FROM net_sales n
+	JOIN dim_customer c
+	ON c.customer_code = n.customer_code 
+	WHERE 
+		n.fiscal_year = in_fiscal_year AND
+        n.market = in_market
+	GROUP BY c.customer
+	ORDER BY net_sales_millions DESC
+    LIMIT in_top_n;
+END
+
+-- ====================================================
+-- Stored Procedure: get_top_n_products_by_net_sales
+-- ====================================================
+-- Purpose: 
+-- Returns top N products by net sales for a given fiscal year
+
+CREATE PROCEDURE `get_top_n_customers_by_net_sales` (
+	IN in_fiscal_year INT,
+	IN in_top_n INT)
+BEGIN 
+	SELECT
+	product,
+	ROUND(SUM(net_sales)/1000000,2) AS net_sales_millions
+FROM net_sales n 
+WHERE fiscal_year = in_fiscal_year
+GROUP BY product
+ORDER BY net_sales_millions DESC
+LIMIT in_top_n;
+END

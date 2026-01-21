@@ -28,6 +28,13 @@ Stores product-related attributes such as :
 
 Used across pricing, cost and sales-related fact tables
 
+### dim_date
+Stores product-related attributes such as :
+- calendar_date
+- fiscal_year
+
+Used when dates are necessary for grouping aggregations in complex queries
+
 ## Fact Tables
 
 ### facts_forecast_monthly
