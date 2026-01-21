@@ -34,3 +34,43 @@ FROM
 LEFT JOIN fact_sales_monthly sm
 USING (date, customer_code, product_code)
 )
+
+-- ====================================================
+-- Trigger: fact_sales_monthly_AFTER_INSERT & fact_forecast_monthly_AFTER_INSERT
+-- ====================================================
+-- Source: fact_act_est (Combination of actual and forecast table)
+-- When a new record is inserted or updated in fact_act_est, the corresponding tables:
+-- fact_sales_monthly and fact_forecast_monthly will also be updated due to this trigger, maintaining historical records 
+
+CREATE DEFINER = CURRENT_USER TRIGGER `gdb0041`.`fact_sales_monthly_AFTER_INSERT` AFTER INSERT ON `fact_sales_monthly` FOR EACH ROW
+BEGIN
+	INSERT INTO fact_act_est
+		(date, product_code, customer_code, sold_quantity)
+	VALUES (
+				NEW.date,
+        NEW.product_code, -- Trigger specific, replaces 
+        NEW.customer_code,
+        NEW.sold_quantity
+    )
+    
+    ON duplicate key update
+		sold_quantity = values(sold_quantity);
+    
+END
+
+------------------------------------------------------------------------------------------------------------------------------------------  
+
+  CREATE DEFINER = CURRENT_USER TRIGGER `gdb0041`.`fact_forecast_monthly_AFTER_INSERT` AFTER INSERT ON `fact_forecast_monthly` FOR EACH ROW
+BEGIN
+	INSERT INTO fact_act_est
+		(date, product_code, customer_code, forecast_quantity)
+	VALUES (
+				NEW.date,
+        NEW.product_code, 
+        NEW.customer_code,
+        NEW.forecast_quantity
+    )
+    
+    ON duplicate key update
+		forecast_quantity = values(forecast_quantity);
+END
