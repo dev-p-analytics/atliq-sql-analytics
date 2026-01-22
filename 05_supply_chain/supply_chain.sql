@@ -40,3 +40,43 @@ JOIN dim_customer c ON s.customer_code = c.customer_code
 WHERE s.fiscal_year = 2021
 GROUP BY s.customer_code, c.customer, c.market
 ORDER BY abs_error_pct DESC;
+
+-- ====================================================
+-- Stored Procedure: get_forecast_accuracy
+-- Purpose:
+-- Calculates forecast accuracy and bias by customer
+-- for a given fiscal year, using actual vs forecast data
+--
+-- Accuracy Definition:
+-- forecast_accuracy = 100 - absolute_error_pct
+-- (bounded to 0 if absolute error exceeds 100%)
+-- ====================================================
+
+CREATE PROCEDURE `get_forecast_accuracy` (
+IN in_fiscal_year INT)
+BEGIN
+	WITH forecast_err_table AS (
+SELECT 
+    s.customer_code,
+    c.customer,
+    c.market,
+    SUM(s.forecast_quantity - s.sold_quantity) AS net_error,
+    ROUND(SUM(s.forecast_quantity - s.sold_quantity) * 100.0 / 
+          NULLIF(SUM(s.forecast_quantity), 0), 2) AS net_error_pct,
+    SUM(ABS(s.forecast_quantity - s.sold_quantity)) AS abs_error,
+    ROUND(SUM(ABS(s.forecast_quantity - s.sold_quantity)) * 100.0 / 
+          NULLIF(SUM(s.forecast_quantity), 0), 2) AS abs_error_pct,
+    SUM(s.forecast_quantity) AS total_forecast,
+    SUM(s.sold_quantity) AS total_actual,
+    COUNT(*) AS record_count
+FROM fact_act_est s
+JOIN dim_customer c ON s.customer_code = c.customer_code
+WHERE s.fiscal_year = in_fiscal_year
+GROUP BY s.customer_code, c.customer, c.market
+)
+SELECT *,
+	IF( abs_error_pct > 100,0,(100-abs_error_pct)) AS forecast_accuracy
+FROM forecast_err_table
+
+ORDER BY forecast_accuracy DESC;
+END
