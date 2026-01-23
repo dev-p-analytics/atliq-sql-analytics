@@ -80,3 +80,26 @@ FROM forecast_err_table
 
 ORDER BY forecast_accuracy DESC;
 END
+
+-- ====================================================
+-- Supply Chain Query: Forecast Accuracy Trend by Month
+-- Purpose:
+-- Calculates forecast accuracy and compares it by monthly dates
+-- ====================================================
+
+SELECT
+    date,
+    ROUND(
+        100 - (
+            SUM(ABS(forecast_quantity - sold_quantity)) * 100.0 /
+            NULLIF(SUM(forecast_quantity), 0)
+        ),
+        2
+    ) AS forecast_accuracy
+FROM fact_act_est
+WHERE fiscal_year = 2021
+  AND forecast_quantity IS NOT NULL
+  AND sold_quantity IS NOT NULL
+GROUP BY date
+ORDER BY date;
+
