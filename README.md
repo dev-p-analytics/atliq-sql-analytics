@@ -9,12 +9,15 @@ AtliQ Hardware's management lacked sufficient data-driven insights to make fast,
 - MYSQL Workbench - query development and data exploration
 
 ## Repository Structure 
+
+```
 atliq-sql-analytics/
 ├── 01_business_context/     # Background on AtliQ Hardware and business problem
 ├── 02_data_model/           # Entity-relationship diagrams and schema overview
 ├── 03_finance_analysis/     # Gross sales, net sales, P&L reporting queries
 ├── 04_market_analysis/      # Regional performance and customer segmentation
 ├── 05_supply_chain/         # Forecast accuracy and inventory analysis
+```
 
 ## Key Analysis
 ### Finance Analysis
